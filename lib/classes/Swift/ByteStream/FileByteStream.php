@@ -205,25 +205,27 @@ class Swift_ByteStream_FileByteStream extends Swift_ByteStream_AbstractFilterabl
     /** Copy a readOnly Stream to ensure seekability */
     private function _copyReadStream()
     {
-        if ($tmpFile = fopen('php://temp/maxmemory:4096', 'w+b')) {
-            /* We have opened a php:// Stream Should work without problem */
-        } elseif (function_exists('sys_get_temp_dir') && is_writable(sys_get_temp_dir()) && ($tmpFile = tmpfile())) {
-            /* We have opened a tmpfile */
-        } else {
-            throw new Swift_IoException('Unable to copy the file to make it seekable, sys_temp_dir is not writable, php://memory not available');
-        }
-        $currentPos = ftell($this->_reader);
-        fclose($this->_reader);
-        $source = fopen($this->_path, 'rb');
-        if (!$source) {
-            throw new Swift_IoException('Unable to open file for copying ['.$this->_path.']');
-        }
-        fseek($tmpFile, 0, SEEK_SET);
-        while (!feof($source)) {
-            fwrite($tmpFile, fread($source, 4096));
-        }
-        fseek($tmpFile, $currentPos, SEEK_SET);
-        fclose($source);
-        $this->_reader = $tmpFile;
+        throw new \Exception('Read only byte streams not supported.');
+
+        // if ($tmpFile = fopen('php://temp/maxmemory:4096', 'w+b')) {
+        //     /* We have opened a php:// Stream Should work without problem */
+        // } elseif (function_exists('sys_get_temp_dir') && is_writable(sys_get_temp_dir()) && ($tmpFile = tmpfile())) {
+        //     /* We have opened a tmpfile */
+        // } else {
+        //     throw new Swift_IoException('Unable to copy the file to make it seekable, sys_temp_dir is not writable, php://memory not available');
+        // }
+        // $currentPos = ftell($this->_reader);
+        // fclose($this->_reader);
+        // $source = fopen($this->_path, 'rb');
+        // if (!$source) {
+        //     throw new Swift_IoException('Unable to open file for copying ['.$this->_path.']');
+        // }
+        // fseek($tmpFile, 0, SEEK_SET);
+        // while (!feof($source)) {
+        //     fwrite($tmpFile, fread($source, 4096));
+        // }
+        // fseek($tmpFile, $currentPos, SEEK_SET);
+        // fclose($source);
+        // $this->_reader = $tmpFile;
     }
 }
